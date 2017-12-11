@@ -12,6 +12,9 @@ App({
       logs.unshift(Date.now())
       wx.setStorageSync('logs', logs)
 
+      // load subway data
+      
+
       // 登录
       wx.login({
         success: res => {

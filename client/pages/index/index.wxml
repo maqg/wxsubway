@@ -68,6 +68,19 @@
     <text class="user-motto">{{motto}}</text>
   </view>
 
+  <view class="">
+   <dd>
+        <ul class="items">
+            <li>100以内</li>
+            <li>100-500</li>
+            <li>500-1000</li>
+            <li>1000-3000</li>
+            <li>3000以上</li>
+        </ul>
+    </dd>
+    <text>{{subway.length}}</text>
+  </view>
+
   <view class="welcome">
     <text>{{welcome}}</text>
   </view>
