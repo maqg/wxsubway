@@ -19,6 +19,7 @@
 .usermotto {
   margin-top: 10px;
   color: gray;
+  font-size: 0.8em;
 }
 
 .welcome {
