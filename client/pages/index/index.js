@@ -9,29 +9,20 @@ const app = getApp()
 Page({
     data: {
         userInfo: {},
-        logged: false,
         lineId: 0,
         stationId: 0,
         takeSession: false,
         requestResult: '',
         subway: ['a', 'b', 'c'],
-        stations: [],
-        lines: [],
         timeInfo: '不疯狂，无人生',
         hasUserInfo: false,
         welcome: "欢迎使用北京地铁票价助手，by Henry.Ma",
     },
 
     bindLineChange: function (e) {
-      var lineId = e.detail.value;
-      var stations = [];
-      for (var i = 0; i < subway[lineId].stations.length; i++) {
-        var s = subway[lineId].stations[i];
-        stations.push(s.name);
-      }
       this.setData({
         lineId: e.detail.value,
-        stations: stations,
+        stationId: 0,
       })
     },
 
@@ -54,16 +45,8 @@ Page({
     },
 
     onLoad: function () {
-
-      var lines = [];
-      for (var i = 0; i < subway.length; i++) {
-        var s = subway[i];
-        lines.push(s.name);
-      }
-
       this.setData({
         subway: subway,
-        lines: lines,
       })
     },
     
