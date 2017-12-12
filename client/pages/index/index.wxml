@@ -1,15 +1,23 @@
 <!--index.wxml-->
 <view class="container">
 
-  <view class="weui-cells__title">请选择线路</view>
-    <view class="weui-cells weui-cells_after-title">
-      <view class="weui-cell weui-cell_input">
-        <view class="weui-cell__bd">
-          <picker bindchange="bindPickerChange" value="{{index}}" range="{{lines}}">
-            <view class="weui-input">{{lines[index]}}</view>
-          </picker>
-      </view>
-    </view>
+  <view id="selectLineStartLabel">请选择线路</view>
+  <view class="selectLineStart">
+    <picker bindchange="bindLineChange" value="{{lineId}}" range="{{lines}}">
+      <view class="weui-input">{{lines[lineId]}}</view>
+    </picker>
+  </view>
+
+
+  <view id="selectStationStartLabel">请选择站点</view>
+  <view class="selectStationStart">
+    <picker bindchange="bindStationChange" value="{{stationId}}" range="{{stations}}">
+      <view class="weui-input">{{subway[lineId].stations[stationId].name}}</view>
+    </picker>
+  </view>
+
+  <view class="timeInfo">
+    <text>{{timeInfo}}</text>
   </view>
 
   <view class="welcome">

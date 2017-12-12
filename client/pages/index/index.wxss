@@ -16,12 +16,19 @@
   color: #aaa;
 }
 
-.usermotto {
-  margin-top: 10px;
-  color: gray;
+.timeInfo {
+  top: 200px;
+  width: auto;
+  margin-left: 10px;
+  margin-right: 10px;
   font-size: 0.8em;
+  position: absolute;
+  left: 0;
 }
 
 .welcome {
-  margin-top: 200px;
+  position: absolute;
+  color: gray;
+  font-size: 0.8em;
+  bottom: 10px;
 }
