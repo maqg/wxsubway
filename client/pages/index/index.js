@@ -14,7 +14,7 @@ Page({
         takeSession: false,
         requestResult: '',
         subway: ['a', 'b', 'c'],
-        timeInfo: '不疯狂，无人生',
+        timeInfo: '',
         hasUserInfo: false,
         welcome: "欢迎使用北京地铁票价助手，by Henry.Ma",
     },
@@ -27,19 +27,25 @@ Page({
     },
 
     bindStationChange: function (e) {
+      this.setData({
+        stationId: e.detail.value,
+      })
+    },
+
+    onTimeQuery: function (e) {
       var lineId = this.data.lineId;
-      var stationId = parseInt(e.detail.value);
+      var stationId = this.data.stationId;
       var station = this.data.subway[lineId].stations[stationId];
 
-      var timeTable = "首末车：" + station.name + "\n";
+      var timeTable = station.name + "站：\n";
 
       for (var i = 0; i < station.lastTrain.length; i++) {
         var time = station.lastTrain[i];
-        timeTable += "方向：" + time.direction + "，首车：" + time.first + "，末车：" + time.last + "\n";
+        timeTable += "方向：" + time.direction + "\n";
+        timeTable += "首车：" + time.first + "，末车：" + time.last + "\n";
       }
 
       this.setData({
-        stationId: e.detail.value,
         timeInfo: timeTable,
       })
     },
