@@ -30,8 +30,8 @@
     <text>{{timeInfo}}</text>
   </view>
 
-  <view class="welcome">
+  <!--view class="welcome">
     <text>{{welcome}}</text>
-  </view>
+  </view-->
 
 </view>
