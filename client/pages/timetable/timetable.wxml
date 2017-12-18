@@ -1,0 +1,37 @@
+<!--index.wxml-->
+<view class="container">
+
+  <view class="title">
+    <label>首末车查询</label>
+  </view>
+
+  <view id="selectLineStartLabel">请选择线路</view>
+  <view class="selectLineStart">
+    <picker bindchange="bindLineChange" value="{{lineId}}" range-key="name" range="{{subway}}">
+      <view class="weui-input">{{subway[lineId].name}}</view>
+    </picker>
+  </view>
+
+  <view class="selectStationStart">
+    <picker bindchange="bindStationChange" value="{{stationId}}" range-key="name" range="{{subway[lineId].stations}}">
+      <view class="weui-input">{{subway[lineId].stations[stationId].name}}</view>
+    </picker>
+  </view>
+
+  <view bindtouchend="onTimeQuery" class="timeQueryButton">
+    <button>查询</button>
+  </view>
+
+  <view class="timeInfoLabel">
+    <label>首末车时间：</label>
+  </view>
+
+  <view class="timeInfo">
+    <text>{{timeInfo}}</text>
+  </view>
+
+  <!--view class="welcome">
+    <text>{{welcome}}</text>
+  </view-->
+
+</view>
