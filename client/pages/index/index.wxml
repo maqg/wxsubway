@@ -1,11 +1,9 @@
 <!--index.wxml-->
-<view class="container">
+<view class="container mainView">
 
-  <view class="title">
-    <label>首末车查询</label>
-  </view>
+  <view class='title' style="text-align:center;"> {{ title }} </view>
 
-  <view id="selectLineStartLabel">请选择线路</view>
+  <view id="selectLineStartLabel">请选择起始线路</view>
   <view class="selectLineStart">
     <picker bindchange="bindLineChange" value="{{lineId}}" range-key="name" range="{{subway}}">
       <view class="weui-input">{{subway[lineId].name}}</view>
@@ -18,20 +16,35 @@
     </picker>
   </view>
 
+  <view id="selectLineEndLabel">请选择终点线路</view>
+  <view class="selectLineEnd">
+    <picker bindchange="bindLineChange2" value="{{lineId}}" range-key="name" range="{{subway}}">
+      <view class="weui-input">{{subway[lineId].name}}</view>
+    </picker>
+  </view>
+
+  <view class="selectStationEnd">
+    <picker bindchange="bindStationChange2" value="{{stationId}}" range-key="name" range="{{subway[lineId].stations}}">
+      <view class="weui-input">{{subway[lineId].stations[stationId].name}}</view>
+    </picker>
+  </view>
+
   <view bindtouchend="onTimeQuery" class="timeQueryButton">
     <button>查询</button>
   </view>
 
   <view class="timeInfoLabel">
-    <label>首末车时间：</label>
+    <label>查询结果：</label>
   </view>
 
   <view class="timeInfo">
     <text>{{timeInfo}}</text>
   </view>
-
-  <!--view class="welcome">
-    <text>{{welcome}}</text>
-  </view-->
+  
+  <view class="navigatorView">
+    <navigator url="/pages/timetable/timetable" open-type="navigate" hover-class="other-navigator-hover">首末车时间</navigator>
+    <navigator url="/pages/timetable/timetable" open-type="navigate" hover-class="other-navigator-hover">运行图</navigator>
+    <navigator url="/pages/timetable/timetable" open-type="navigate" hover-class="other-navigator-hover">关于</navigator>
+  </view>
 
 </view>

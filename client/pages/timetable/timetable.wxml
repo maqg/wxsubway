@@ -1,9 +1,7 @@
 <!--index.wxml-->
 <view class="container">
 
-  <view class="title">
-    <label>首末车查询</label>
-  </view>
+  <view class="title" style="text-align:center"> {{ title }} </view>
 
   <view id="selectLineStartLabel">请选择线路</view>
   <view class="selectLineStart">

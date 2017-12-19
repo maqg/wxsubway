@@ -1,30 +1,7 @@
 /**index.wxss**/
-.userinfo {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.userinfo-avatar {
-  width: 128rpx;
-  height: 128rpx;
-  margin: 20rpx;
-  border-radius: 50%;
-}
-
-.userinfo-nickname {
-  color: #aaa;
-}
-
-.title {
-  margin-top: 20px;
-  font-size: 1.1em;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
 
 #selectLineStartLabel {
-  top: 60px;
+  top: 40px;
   left: 5px;
   color: grey;
   position: absolute;
@@ -33,7 +10,7 @@
 .selectLineStart {
   position: absolute;
   left: 5px;
-  top: 80px;
+  top: 55px;
   width: 44%;
   padding: 4px;
   margin-top: 10px;
@@ -43,7 +20,35 @@
 .selectStationStart {
   position: absolute;
   right: 5px;
-  top: 80px;
+  top: 55px;
+  width: 44%;
+  padding: 4px;
+  margin-top: 10px;
+  float: right;
+  background-color: gainsboro;
+}
+
+#selectLineEndLabel {
+  top: 105px;
+  left: 5px;
+  color: grey;
+  position: absolute;
+}
+
+.selectLineEnd {
+  position: absolute;
+  left: 5px;
+  top: 120px;
+  width: 44%;
+  padding: 4px;
+  margin-top: 10px;
+  background-color: gainsboro;
+}
+
+.selectStationEnd {
+  position: absolute;
+  right: 5px;
+  top: 120px;
   width: 44%;
   padding: 4px;
   margin-top: 10px;
@@ -54,12 +59,12 @@
 .timeQueryButton {
   position: absolute;
   margin-top: 10px;
-  top: 120px;
+  top: 160px;
   right: 5px;
 }
 
 .timeInfoLabel {
-  top: 180px;
+  top: 190px;
   font-size: 0.9em;
   position: absolute;
   left: 5px;
@@ -68,7 +73,7 @@
 
 .timeInfo {
   height: auto;
-  top: 200px;
+  top: 220px;
   width: 100%;
   padding-left: 5px;
   padding-right: 40px;
@@ -83,4 +88,19 @@
   color: gray;
   font-size: 0.8em;
   bottom: 10px;
+}
+
+.navigatorView {
+  margin: auto;
+  float: left;
+  bottom: 10px;
+  position: absolute;
+}
+
+navigator {
+  color: blue;
+  float: left;
+  margin: 0;
+  padding-left: 10px;
+  padding-right: 10px;
 }
