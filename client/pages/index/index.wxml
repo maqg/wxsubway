@@ -5,27 +5,27 @@
 
   <view id="selectLineStartLabel">请选择起始线路</view>
   <view class="selectLineStart">
-    <picker bindchange="bindLineChange" value="{{lineId}}" range-key="name" range="{{subway}}">
-      <view class="weui-input">{{subway[lineId].name}}</view>
+    <picker bindchange="bindLineChange1" value="{{startLineId}}" range-key="name" range="{{subway}}">
+      <view class="weui-input">{{subway[startLineId].name}}</view>
     </picker>
   </view>
 
   <view class="selectStationStart">
-    <picker bindchange="bindStationChange" value="{{stationId}}" range-key="name" range="{{subway[lineId].stations}}">
-      <view class="weui-input">{{subway[lineId].stations[stationId].name}}</view>
+    <picker bindchange="bindStationChange1" value="{{startStationId}}" range-key="name" range="{{subway[startLineId].stations}}">
+      <view class="weui-input">{{subway[startLineId].stations[startStationId].name}}</view>
     </picker>
   </view>
 
   <view id="selectLineEndLabel">请选择终点线路</view>
   <view class="selectLineEnd">
-    <picker bindchange="bindLineChange2" value="{{lineId}}" range-key="name" range="{{subway}}">
-      <view class="weui-input">{{subway[lineId].name}}</view>
+    <picker bindchange="bindLineChange2" value="{{endLineId}}" range-key="name" range="{{subway}}">
+      <view class="weui-input">{{subway[endLineId].name}}</view>
     </picker>
   </view>
 
   <view class="selectStationEnd">
-    <picker bindchange="bindStationChange2" value="{{stationId}}" range-key="name" range="{{subway[lineId].stations}}">
-      <view class="weui-input">{{subway[lineId].stations[stationId].name}}</view>
+    <picker bindchange="bindStationChange2" value="{{endStationId}}" range-key="name" range="{{subway[endLineId].stations}}">
+      <view class="weui-input">{{subway[endLineId].stations[endStationId].name}}</view>
     </picker>
   </view>
 
@@ -42,7 +42,7 @@
   </view>
   
   <view class="navigatorView">
-    <navigator url="/pages/timetable/timetable" open-type="navigate" hover-class="other-navigator-hover">首末车时间</navigator>
+    <navigator url="/pages/timetable/timetable" open-type="navigate" hover-class="other-navigator-hover">首末车</navigator>
     <navigator url="/pages/map/map" open-type="navigate" hover-class="other-navigator-hover">运行图</navigator>
     <navigator url="/pages/config/config" open-type="navigate" hover-class="other-navigator-hover">关于</navigator>
   </view>

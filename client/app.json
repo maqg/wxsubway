@@ -1,15 +1,31 @@
 {
-  "pages":[
+  "pages": [
     "pages/index/index",
     "pages/timetable/timetable",
     "pages/map/map",
     "pages/config/config"
   ],
-  "window":{
-    "backgroundColor":"#F6F6F6",
-    "backgroundTextStyle":"light",
+  "window": {
+    "backgroundColor": "#F6F6F6",
+    "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#F6F6F6",
     "navigationBarTitleText": "北京地铁票价助手",
-    "navigationBarTextStyle":"black"
+    "navigationBarTextStyle": "black"
+  },
+  "tabTar": {
+    "list": [
+      {
+        "pagePath": "pages/timetable/timetable",
+        "text": "SHOUMOCHE"
+      },
+      {
+        "pagePath": "pages/map/map",
+        "text": "MAP"
+      },
+      {
+        "pagePath": "pages/config/config",
+        "text": "CONFIG"
+      }
+    ]
   }
 }

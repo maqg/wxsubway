@@ -1,4 +1,10 @@
 <!--index.wxml-->
 <view class="container">
   <view class="title" style="text-align:center"> {{ title }} </view>
+  <view>
+    <scroll-view scroll-y="true" scroll-x="true" style="height:100%; width:100%">
+      <!--image id="SFimg" catchtouchend="endtap" catchtouchmove="movetap" bindload="imgload" style="width:{{ scaleWidth }}px;height:{{ scaleHeight }}px" mode="aspectFit" src="/pages/map/subway.jpg"></image-->
+      <image id="SFimg" catchtouchend="endtap" catchtouchmove="movetap" bindload="imgload" style="width:{{ scaleWidth }}px;height:{{ scaleHeight }}px" mode="scaleToFill" src="/pages/map/subway.jpg"></image>
+    </scroll-view>
+  </view>
 </view>

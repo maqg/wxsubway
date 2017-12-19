@@ -93,7 +93,9 @@
 .navigatorView {
   margin: auto;
   float: left;
+  width: auto;
   bottom: 10px;
+  font-size: 14pt;
   position: absolute;
 }
 

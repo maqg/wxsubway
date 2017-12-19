@@ -6,49 +6,44 @@ const app = getApp()
 Page({
   data: {
     title: "票价查询",
-    userInfo: {},
-    lineId: 0,
-    stationId: 0,
-    takeSession: false,
-    requestResult: '',
-    subway: ['a', 'b', 'c'],
-    timeInfo: '',
-    hasUserInfo: false,
-    welcome: "欢迎使用北京地铁票价助手，by Henry.Ma",
-
+    startLineId: 0,
+    startStationId: 0,
+    endLineId: 0,
+    endStationId: 0,
+    subway: [],
     stationListMap: {},
-  },
-
-  bindLineChange: function (e) {
-    this.setData({
-      lineId: e.detail.value,
-      stationId: 0,
-    })
-  },
-
-  bindStationChange: function (e) {
-    this.setData({
-      stationId: e.detail.value,
-    })
   },
 
   bindLineChange1: function (e) {
     this.setData({
-      lineId: e.detail.value,
-      stationId: 0,
+      startLineId: e.detail.value,
+      startStationId: 0,
     })
   },
 
   bindStationChange1: function (e) {
     this.setData({
-      stationId: e.detail.value,
+      startStationId: e.detail.value,
+    })
+  },
+
+  bindLineChange2: function (e) {
+    this.setData({
+      endLineId: e.detail.value,
+      endStationId: 0,
+    })
+  },
+
+  bindStationChange2: function (e) {
+    this.setData({
+      endStationId: e.detail.value,
     })
   },
 
   onTimeQuery: function (e) {
-    var lineId = this.data.lineId;
-    var stationId = this.data.stationId;
-    var station = this.data.subway[lineId].stations[stationId];
+    var startLineId = this.data.startLineId;
+    var startStationId = this.data.startStationId;
+    var station = this.data.subway[startLineId].stations[startStationId];
 
     var timeTable = station.name + "站：\n";
 

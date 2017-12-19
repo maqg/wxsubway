@@ -3,6 +3,10 @@
 
   <view class="title" style="text-align:center"> {{ title }} </view>
 
+  <view>
+    <text>超级简单实用的地铁票价查询小助手。。。</text>
+  </view>
+
   <view class="welcome">
     <text>{{welcome}}</text>
   </view>
