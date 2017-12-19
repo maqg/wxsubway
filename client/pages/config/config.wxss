@@ -1,0 +1,8 @@
+/**index.wxss**/
+
+.welcome {
+  position: absolute;
+  color: gray;
+  font-size: 0.8em;
+  bottom: 10px;
+}

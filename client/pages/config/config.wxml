@@ -1,0 +1,10 @@
+<!--index.wxml-->
+<view class="container">
+
+  <view class="title" style="text-align:center"> {{ title }} </view>
+
+  <view class="welcome">
+    <text>{{welcome}}</text>
+  </view>
+
+</view>

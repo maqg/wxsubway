@@ -1,7 +1,9 @@
 {
   "pages":[
     "pages/index/index",
-    "pages/timetable/timetable"
+    "pages/timetable/timetable",
+    "pages/map/map",
+    "pages/config/config"
   ],
   "window":{
     "backgroundColor":"#F6F6F6",

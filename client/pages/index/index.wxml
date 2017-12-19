@@ -43,8 +43,8 @@
   
   <view class="navigatorView">
     <navigator url="/pages/timetable/timetable" open-type="navigate" hover-class="other-navigator-hover">首末车时间</navigator>
-    <navigator url="/pages/timetable/timetable" open-type="navigate" hover-class="other-navigator-hover">运行图</navigator>
-    <navigator url="/pages/timetable/timetable" open-type="navigate" hover-class="other-navigator-hover">关于</navigator>
+    <navigator url="/pages/map/map" open-type="navigate" hover-class="other-navigator-hover">运行图</navigator>
+    <navigator url="/pages/config/config" open-type="navigate" hover-class="other-navigator-hover">关于</navigator>
   </view>
 
 </view>
