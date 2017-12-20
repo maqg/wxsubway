@@ -18,6 +18,8 @@ Page({
     stationList: [],
     stationCount: 0,
     distanceMap: {},
+    distances: [],
+    prevNodes: {},
   },
 
   bindLineChange1: function (e) {
@@ -54,12 +56,23 @@ Page({
     var startStation = this.data.stationListMap[startStationName];
     var endStation = this.data.stationListMap[endStationName];
 
-    var timeTable = startStation.name + "站：\n";
+    this.dijkstra(startStation);
 
-    timeTable += endStation.name + "站";
+    var stationList = this.getStationList(startStation["position"], endStation["position"]);
+
+    var outText = "注意：以下结果给出的是最短距离的计价方案，并不一定是最优的换乘方案";
+    outText += "\n总距离：" + this.data.distances[endStation["position"]] + " 米";
+    outText += "\n消耗时间：约 " + 20 + " 分钟";
+    outText += "\n单次费用：" + "price" + " 元";
+    outText += "\n每月花费：约 " + "price" + " 元";
+    outText += "\n每年花费：约 " + "price" + " 元";
+    outText += "\n经停站：（共计 " + (stationList.length - 1) + " 站）";
+    outText += "\n" + "";
+
+    outText += endStation.name + "站";
 
     this.setData({
-      timeInfo: timeTable,
+      timeInfo: outText,
     })
   },
 
@@ -87,9 +100,38 @@ Page({
     }
   },
 
+  getStationList: function(start, end) {
+    var pathList = [];
+    var	prevStation = this.data.prevNodes[end];
+
+    while (prevStation != -1 && prevStation != start) {
+      var temp = [this.data.stationList[prevStation]];
+      pathList = temp.concat(pathList);
+      prevStation = this.data.prevNodes[prevStation];
+    }
+	
+    var temp = [this.data.stationList[start]];
+    pathList = temp.concat(pathList);
+    pathList.push(this.data.stationList[end]);
+
+    return pathList;
+  },
+
+  getShortest: function(total, visited, distances) {
+    var min = MAXINT;
+    var shortest = -1;
+    for (var i = 0; i < this.data.stationCount; i++) {
+      if (visited[i] == false && distances[i] < min) {
+        min = distances[i];
+        shortest = i;
+      }
+    }
+    return shortest;
+  },
+
   getDistance: function (key) {
     if (this.data.distanceMap.hasOwnProperty(key)) {
-      return this.data.distanceMap.hasOwnProperty(key);
+      return this.data.distanceMap[key];
     } else {
       return MAXINT;
     }
@@ -120,7 +162,7 @@ Page({
 
     while (true) {
 
-      var latest = 0; //getShortest(stationCount, visited, distances)
+      var latest = this.getShortest(stationCount, visited, distances)
       if (latest == -1) {
         break;
       }
@@ -133,7 +175,8 @@ Page({
         }
       }
     }
-    return distances;
+    this.data.distances = distances;
+    this.data.prevNodes = prevNodes;
   },
 
   initDijkstra: function () {
