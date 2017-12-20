@@ -2,6 +2,7 @@
 var subway = require('../../subway')
 
 var JICHANG_LINE_105 = 105;
+var MAXINT = 999999;
 
 const app = getApp()
 
@@ -46,24 +47,23 @@ Page({
   },
 
   onTimeQuery: function (e) {
-    var startLineId = this.data.startLineId;
-    var startStationId = this.data.startStationId;
-    var station = this.data.subway[startLineId].stations[startStationId];
 
-    var timeTable = station.name + "站：\n";
+    var startStationName = this.data.subway[this.data.startLineId].stations[this.data.startStationId].name;
+    var endStationName = this.data.subway[this.data.endLineId].stations[this.data.endStationId].name;
 
-    for (var i = 0; i < station.lastTrain.length; i++) {
-      var time = station.lastTrain[i];
-      timeTable += "方向：" + time.direction + "\n";
-      timeTable += "首车：" + time.first + "，末车：" + time.last + "\n";
-    }
+    var startStation = this.data.stationListMap[startStationName];
+    var endStation = this.data.stationListMap[endStationName];
+
+    var timeTable = startStation.name + "站：\n";
+
+    timeTable += endStation.name + "站";
 
     this.setData({
       timeInfo: timeTable,
     })
   },
 
-  getOldStation: function(stationName) {
+  getOldStation: function (stationName) {
     if (this.data.stationListMap.hasOwnProperty(stationName)) {
       return this.data.stationListMap[stationName];
     } else {
@@ -71,7 +71,7 @@ Page({
     }
   },
 
-  getPrevStation: function(line, index) {
+  getPrevStation: function (line, index) {
     if (index == 0) {
       return null;
     } else {
@@ -87,7 +87,56 @@ Page({
     }
   },
 
-  initDijkstra: function() {
+  getDistance: function (key) {
+    if (this.data.distanceMap.hasOwnProperty(key)) {
+      return this.data.distanceMap.hasOwnProperty(key);
+    } else {
+      return MAXINT;
+    }
+  },
+
+  dijkstra: function (station) {
+    var stationCount = this.data.stationCount;
+    var visited = [];
+    var prevNodes = {}; //当前节点的前一节点
+    var distances = []; //到下一点的距离
+
+    var start = station["position"];
+
+    // init something
+    for (var i = 0; i < stationCount; i++) {
+      visited.push(false);
+      distances.push(MAXINT);
+    }
+
+    for (var i = 0; i < stationCount; i++) {
+      distances[i] = this.getDistance(start + "-" + i);
+      if (i != start && distances[i] < MAXINT) {
+        prevNodes[i] = start;
+      } else {
+        prevNodes[i] = -1;
+      }
+    }
+
+    while (true) {
+
+      var latest = 0; //getShortest(stationCount, visited, distances)
+      if (latest == -1) {
+        break;
+      }
+      visited[latest] = true;
+      for (var i = 0; i < stationCount; i++) {
+        var dist = this.getDistance(latest + "-" + i);
+        if (visited[i] == false && dist != MAXINT && distances[latest] + dist < distances[i]) {
+          distances[i] = distances[latest] + dist;
+          prevNodes[i] = latest;
+        }
+      }
+    }
+    return distances;
+  },
+
+  initDijkstra: function () {
 
     var position = 0;
 
@@ -147,7 +196,7 @@ Page({
                 "length": prevStation["length"]
               });
             }
-          } 
+          }
 
         } else { // 该站点首次被录入
           station["lineIds"] = [line["id"]];
@@ -171,7 +220,7 @@ Page({
               });
             }
           }
-          
+
           if (prevStation != null) { // having prevStation
             var oldPrevStation = this.getOldStation(prevStation["name"]);
             station["subStations"].push({
