@@ -3,6 +3,17 @@ var subway = require('../../subway')
 
 var JICHANG_LINE_105 = 105;
 var MAXINT = 999999;
+var STATION_ID_SIHUI_LINE1 = 1211; //四惠，1号线
+var STATION_ID_SIHUIDONG_LINE1 = 1221; //四惠东，1号线
+var STATION_ID_SIHUI_LINE8TONG = 14001; //四惠，八通线
+var STATION_ID_SIHUIDONG_LINE8TONG = 14011; //四惠东，八通线
+
+const SPECIAL_STATIONS = [
+  STATION_ID_SIHUI_LINE1,
+  STATION_ID_SIHUIDONG_LINE1,
+  STATION_ID_SIHUI_LINE8TONG,
+  STATION_ID_SIHUIDONG_LINE8TONG
+];
 
 const app = getApp()
 
@@ -281,6 +292,8 @@ Page({
 
   onLoad: function () {
 
+    subway.pop(subway.length - 1);
+
     this.setData({
       subway: subway,
     })
@@ -331,13 +344,50 @@ Page({
         nameList += this.data.prevStationList[i].name;
       } else {
         nameList += "->" + this.data.prevStationList[i].name;
-        /*if (isExchangeStation(i)) {
-          var line = getExchangeLine(i);
-          nameList += "（换乘" + line.getName() + "）";
-        }*/
+        /*
+        if (this.isExchangeStation(i)) {
+          //var line = getExchangeLine(i);
+         //nameList += "（换乘" + line.getName() + "）";
+        }
+        */
       }
     }
     return nameList;
+  },
+
+  isSpecialStation: function(stationId) {
+    return SPECIAL_STATIONS.indexOf(stationId) != -1;
+  },
+
+  isExchangeStation: function (stationId) {
+
+    // first or last station should be false.
+    if (stationId == 0 || stationId == this.data.prevStationList.length - 1) {
+      return false;
+    }
+
+    var stationStart = this.data.prevStationList[stationId - 1];
+    var stationEnd = this.data.prevStationList[stationId + 1];
+    var thisStation = this.data.prevStationList[stationId];
+
+    var lineIds2 = stationEnd["lineIds"];
+    var inSameLine = false;
+
+    for (var i = 0; i < stationStart["lineIds"].length; i++) {
+      var lineId = stationStart["lineIds"][i];
+      if (lineIds2.indexOf(lineId) != -1) {
+        inSameLine = true;
+        // to process special case
+        if (this.isSpecialStation(thisStation["id"])) {
+          if (stationId != 1 && stationId != this.data.prevStationList.length - 2 && this.isExchangeStation(stationId - 1) == false) {
+            inSameLine = false;
+          }
+        }
+        break;
+      }
+    }
+
+    return inSameLine;
   },
 
   onQuery: function (e) {
