@@ -64,7 +64,7 @@
 }
 
 .infoLabel {
-  top: 190px;
+  top: 200px;
   font-size: 0.9em;
   position: absolute;
   left: 5px;

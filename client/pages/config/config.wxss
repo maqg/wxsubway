@@ -6,3 +6,8 @@
   font-size: 0.8em;
   bottom: 10px;
 }
+
+.configData {
+  font-size: 11pt;
+  padding-left: 5px;
+}

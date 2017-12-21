@@ -15,7 +15,6 @@
     color:red;
 }
 
-
 .userinfo {
   display: flex;
   flex-direction: column;
@@ -38,4 +37,5 @@
   font-size: 1em;
   font-weight: bold;
   margin-bottom: 5px;
+  width: 120px;
 }

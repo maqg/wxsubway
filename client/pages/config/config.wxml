@@ -3,8 +3,12 @@
 
   <view class="title" style="text-align:center"> {{ title }} </view>
 
-  <view>
-    <text>超级简单实用的地铁票价查询小助手。。。</text>
+  <view style='margin-top: 15px'>
+    <view class='configData'>作者：{{author}}</view>
+    <view class='configData'>版本：{{version}}</view>
+    <view class='configData'>释放时间：{{releaseTime}}</view>
+    <view class='configData'>数据更新时间：{{dataUpdateTime}}</view>
+    <view class='configData'>简介：{{desc}}</view>
   </view>
 
   <view class="welcome">

@@ -297,6 +297,7 @@ Page({
     } else if (distance == 0) {
       this.data.price = 3;
     } else {
+      this.data.price = 2 + parseInt((distance + 6000 - 1) / 6000);
     }
 
     // suppose 24 days for every month.
@@ -347,12 +348,17 @@ Page({
     var startStation = this.data.stationListMap[startStationName];
     var endStation = this.data.stationListMap[endStationName];
 
+    this.setData({
+      timeInfo: "查询中。。。",
+    })
+
     this.dijkstra(startStation);
 
     this.data.prevStationList = this.getStationList(startStation["position"], endStation["position"]);
-    this.calculateFee(this.data.distances[endStation["position"]]);
-
     var distance = this.data.distances[endStation["position"]];
+
+    this.calculateFee(distance);
+
     var outText = "注意：以下结果给出的是最短距离的计价方案，并不一定是最优的换乘方案";
     outText += "\n总距离：" + distance + " 米";
     outText += "\n消耗时间：约 " + this.getMinutes(distance) + " 分钟";
@@ -360,7 +366,7 @@ Page({
     outText += "\n每月花费：约 " + this.data.payMonth + " 元";
     outText += "\n每年花费：约 " + this.data.payYear + " 元";
     outText += "\n经停站：（共计 " + (this.data.prevStationList.length - 1) + " 站）";
-    outText += "\n" + "";
+    outText += "\n";
 
     outText += this.getStationListStr();
 
