@@ -20,6 +20,7 @@ const app = getApp()
 Page({
   data: {
     title: "票价查询",
+    lineListMap: {},
     startLineId: 0,
     startStationId: 0,
     endLineId: 0,
@@ -196,6 +197,8 @@ Page({
         continue;
       }
 
+      this.data.lineListMap[line.id] = line;
+
       for (var j = 0; j < line.stations.length; j++) {
         var station = line.stations[j];
         var oldStation = this.getOldStation(station["name"])
@@ -213,7 +216,7 @@ Page({
               });
             } else {
               oldStation["subStations"].push({
-                "station": oldStation["position"] + 1,
+                "station": position,
                 "length": station["length"]
               });
             }
@@ -251,7 +254,7 @@ Page({
               });
             } else { // 该下一跳站点尚未被录入
               station["subStations"].push({
-                "station": station["position"] + 1,
+                "station": position,
                 "length": station["length"]
               });
             }
@@ -337,6 +340,19 @@ Page({
     return parseInt((seconds + 30 - 1) / 60) + this.data.exchangeStationList.length * 5;
   },
 
+   getExchangeLine: function(stationId) {
+    var list1 = this.data.prevStationList[stationId - 1]["lineIds"];
+    var list2 = this.data.prevStationList[stationId + 1]["lineIds"];
+    var listBetween = this.data.prevStationList[stationId]["lineIds"];
+
+    for (var i = 0; i < listBetween.length; i++) {
+      var lineId = listBetween[i];
+      if (list1.indexOf(lineId) == -1 && list2.indexOf(lineId) != -1) {
+        return this.data.lineListMap[lineId];
+      }
+    }
+  },
+
   getStationListStr: function () {
     var nameList = "";
     for (var i = 0; i < this.data.prevStationList.length; i++) {
@@ -344,18 +360,16 @@ Page({
         nameList += this.data.prevStationList[i].name;
       } else {
         nameList += "->" + this.data.prevStationList[i].name;
-        /*
         if (this.isExchangeStation(i)) {
-          //var line = getExchangeLine(i);
-         //nameList += "（换乘" + line.getName() + "）";
+          var line = this.getExchangeLine(i);
+          nameList += "（换乘" + line["name"] + "）";
         }
-        */
       }
     }
     return nameList;
   },
 
-  isSpecialStation: function(stationId) {
+  isSpecialStation: function (stationId) {
     return SPECIAL_STATIONS.indexOf(stationId) != -1;
   },
 
@@ -371,23 +385,24 @@ Page({
     var thisStation = this.data.prevStationList[stationId];
 
     var lineIds2 = stationEnd["lineIds"];
-    var inSameLine = false;
 
     for (var i = 0; i < stationStart["lineIds"].length; i++) {
       var lineId = stationStart["lineIds"][i];
       if (lineIds2.indexOf(lineId) != -1) {
-        inSameLine = true;
-        // to process special case
+        /*
+         // to process special case
         if (this.isSpecialStation(thisStation["id"])) {
-          if (stationId != 1 && stationId != this.data.prevStationList.length - 2 && this.isExchangeStation(stationId - 1) == false) {
-            inSameLine = false;
+          if (stationId != 1 && stationId != this.data.prevStationList.length - 2
+            && this.isExchangeStation(stationId - 1) == false) {
+            return true;
           }
         }
-        break;
+        */
+        return false;
       }
     }
 
-    return inSameLine;
+    return true;
   },
 
   onQuery: function (e) {
