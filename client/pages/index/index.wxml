@@ -29,15 +29,15 @@
     </picker>
   </view>
 
-  <view bindtouchend="onTimeQuery" class="timeQueryButton">
+  <view bindtouchend="onQuery" class="queryButton">
     <button>查询</button>
   </view>
 
-  <view class="timeInfoLabel">
+  <view class="infoLabel">
     <label>查询结果：</label>
   </view>
 
-  <view class="timeInfo">
+  <view class="infoContent">
     <text>{{timeInfo}}</text>
   </view>
   

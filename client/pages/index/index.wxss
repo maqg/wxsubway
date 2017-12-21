@@ -56,14 +56,14 @@
   background-color: gainsboro;
 }
 
-.timeQueryButton {
+.queryButton {
   position: absolute;
   margin-top: 10px;
   top: 160px;
   right: 5px;
 }
 
-.timeInfoLabel {
+.infoLabel {
   top: 190px;
   font-size: 0.9em;
   position: absolute;
@@ -71,7 +71,7 @@
   font-weight: bold;
 }
 
-.timeInfo {
+.infoContent {
   height: auto;
   top: 220px;
   width: auto;

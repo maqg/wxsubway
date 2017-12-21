@@ -20,6 +20,11 @@ Page({
     distanceMap: {},
     distances: [],
     prevNodes: {},
+    price: 0,
+    payMonth: 0,
+    payYear: 0,
+    prevStationList: [],
+    exchangeStationList: [],
   },
 
   bindLineChange1: function (e) {
@@ -48,34 +53,6 @@ Page({
     })
   },
 
-  onTimeQuery: function (e) {
-
-    var startStationName = this.data.subway[this.data.startLineId].stations[this.data.startStationId].name;
-    var endStationName = this.data.subway[this.data.endLineId].stations[this.data.endStationId].name;
-
-    var startStation = this.data.stationListMap[startStationName];
-    var endStation = this.data.stationListMap[endStationName];
-
-    this.dijkstra(startStation);
-
-    var stationList = this.getStationList(startStation["position"], endStation["position"]);
-
-    var outText = "注意：以下结果给出的是最短距离的计价方案，并不一定是最优的换乘方案";
-    outText += "\n总距离：" + this.data.distances[endStation["position"]] + " 米";
-    outText += "\n消耗时间：约 " + 20 + " 分钟";
-    outText += "\n单次费用：" + "price" + " 元";
-    outText += "\n每月花费：约 " + "price" + " 元";
-    outText += "\n每年花费：约 " + "price" + " 元";
-    outText += "\n经停站：（共计 " + (stationList.length - 1) + " 站）";
-    outText += "\n" + "";
-
-    outText += endStation.name + "站";
-
-    this.setData({
-      timeInfo: outText,
-    })
-  },
-
   getOldStation: function (stationName) {
     if (this.data.stationListMap.hasOwnProperty(stationName)) {
       return this.data.stationListMap[stationName];
@@ -100,16 +77,21 @@ Page({
     }
   },
 
-  getStationList: function(start, end) {
+  getStationList: function (start, end) {
     var pathList = [];
-    var	prevStation = this.data.prevNodes[end];
+    var prevStation = this.data.prevNodes[end];
+
+    if (start == end) {
+      pathList.push(this.data.stationList[start]);
+      return pathList;
+    }
 
     while (prevStation != -1 && prevStation != start) {
       var temp = [this.data.stationList[prevStation]];
       pathList = temp.concat(pathList);
       prevStation = this.data.prevNodes[prevStation];
     }
-	
+
     var temp = [this.data.stationList[start]];
     pathList = temp.concat(pathList);
     pathList.push(this.data.stationList[end]);
@@ -117,7 +99,7 @@ Page({
     return pathList;
   },
 
-  getShortest: function(total, visited, distances) {
+  getShortest: function (total, visited, distances) {
     var min = MAXINT;
     var shortest = -1;
     for (var i = 0; i < this.data.stationCount; i++) {
@@ -286,8 +268,13 @@ Page({
         var length = subConfig["length"];
         var key = station["position"] + "-" + subStation["position"];
         var key2 = subStation["position"] + "-" + station["position"];
+        var key3 = subStation["position"] + "-" + subStation["position"];
+        var key4 = station["position"] + "-" + station["position"];
+
         this.data.distanceMap[key] = length;
         this.data.distanceMap[key2] = length;
+        this.data.distanceMap[key3] = 0;
+        this.data.distanceMap[key4] = 0;
       }
     }
   },
@@ -299,6 +286,87 @@ Page({
     })
 
     this.initDijkstra();
+  },
+
+  calculateFee: function (distance) {
+    // pricing
+    if (distance > 32000) {
+      this.data.price = parseInt(6 + (distance - 32000 + 20000 - 1) / 20000);
+    } else if (distance > 12000) {
+      this.data.price = 4 + parseInt((distance - 12000 + 10000 - 1) / 10000);
+    } else if (distance == 0) {
+      this.data.price = 3;
+    } else {
+    }
+
+    // suppose 24 days for every month.
+    this.data.payMonth = 100;
+    var total = this.data.price * 24 * 2;
+    if (total - 150 > 0) {
+      this.data.payMonth += parseInt((total - 150) * 0.5);
+      total = (total - (total - 150)); // 150
+    }
+
+    if (total - 100 > 0) {
+      this.data.payMonth += parseInt((total - 100) * 0.8);
+    }
+
+    this.data.payYear = 12 * this.data.payMonth;
+  },
+
+  getMinutes: function (distance) {
+    if (distance == 0) {
+      return 0;
+    }
+    var seconds = parseInt((distance + 500 - 1) / 1000) * 90;
+    seconds += (this.data.prevStationList.length - 1) * 32;
+    return parseInt((seconds + 30 - 1) / 60) + this.data.exchangeStationList.length * 5;
+  },
+
+  getStationListStr: function () {
+    var nameList = "";
+    for (var i = 0; i < this.data.prevStationList.length; i++) {
+      if (i == 0) {
+        nameList += this.data.prevStationList[i].name;
+      } else {
+        nameList += "->" + this.data.prevStationList[i].name;
+        /*if (isExchangeStation(i)) {
+          var line = getExchangeLine(i);
+          nameList += "（换乘" + line.getName() + "）";
+        }*/
+      }
+    }
+    return nameList;
+  },
+
+  onQuery: function (e) {
+
+    var startStationName = this.data.subway[this.data.startLineId].stations[this.data.startStationId].name;
+    var endStationName = this.data.subway[this.data.endLineId].stations[this.data.endStationId].name;
+
+    var startStation = this.data.stationListMap[startStationName];
+    var endStation = this.data.stationListMap[endStationName];
+
+    this.dijkstra(startStation);
+
+    this.data.prevStationList = this.getStationList(startStation["position"], endStation["position"]);
+    this.calculateFee(this.data.distances[endStation["position"]]);
+
+    var distance = this.data.distances[endStation["position"]];
+    var outText = "注意：以下结果给出的是最短距离的计价方案，并不一定是最优的换乘方案";
+    outText += "\n总距离：" + distance + " 米";
+    outText += "\n消耗时间：约 " + this.getMinutes(distance) + " 分钟";
+    outText += "\n单次费用：" + this.data.price + " 元";
+    outText += "\n每月花费：约 " + this.data.payMonth + " 元";
+    outText += "\n每年花费：约 " + this.data.payYear + " 元";
+    outText += "\n经停站：（共计 " + (this.data.prevStationList.length - 1) + " 站）";
+    outText += "\n" + "";
+
+    outText += this.getStationListStr();
+
+    this.setData({
+      timeInfo: outText,
+    })
   },
 
 })
