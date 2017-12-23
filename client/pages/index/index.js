@@ -355,15 +355,27 @@ Page({
 
   getStationListStr: function () {
     var nameList = "";
+    var passed = 0; // 经过的站点数
+
+    if (this.data.prevStationList.length == 1) {
+      return nameList;
+    }
+
     for (var i = 0; i < this.data.prevStationList.length; i++) {
       if (i == 0) {
-        nameList += this.data.prevStationList[i].name;
+        nameList += "从【" + this.data.prevStationList[i].name + "】出发，";
+        passed++;
+      } else if (i == this.data.prevStationList.length - 1) {
+        nameList += "经过 " + passed + " 站到达目的地【" + this.data.prevStationList[i].name + "】。";
+        passed = 0;
       } else {
-        nameList += "->" + this.data.prevStationList[i].name;
         if (this.isExchangeStation(i)) {
           var line = this.getExchangeLine(i);
-          nameList += "（换乘" + line["name"] + "）";
+          nameList += "经过 " + passed + " 站到达【" + this.data.prevStationList[i].name + "】，";
+          nameList += "换乘（" + line["name"] + "），";
+          passed = 0;
         }
+        passed++;
       }
     }
     return nameList;
