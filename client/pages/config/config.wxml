@@ -1,5 +1,5 @@
 <!--index.wxml-->
-<view class="container">
+<!--view class="container">
 
   <view class="title" style="text-align:center"> {{ title }} </view>
 
@@ -15,4 +15,10 @@
     <text>{{welcome}}</text>
   </view>
 
+</view-->
+<view class="container" style="height:{{screenHeight}}px;">
+  <view class="cnt">
+    <image class="image-style" src="/pages/map/subway.jpg" style="width:{{imgwidth}}px;height:{{imgheight}}px;" bindtouchstart="startEvent" bindtouchmove="moveEvent" bindload="imageLoad" animation="{{animationData}}" bindtouchend="endEvent">
+    </image>
+  </view>
 </view>
