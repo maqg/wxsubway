@@ -16,9 +16,10 @@
   </view>
 
 </view-->
-<view class="container" style="height:{{screenHeight}}px;">
+
+<view class="container">
   <view class="cnt">
-    <image class="image-style" src="/pages/map/subway.jpg" style="width:{{imgwidth}}px;height:{{imgheight}}px;" bindtouchstart="startEvent" bindtouchmove="moveEvent" bindload="imageLoad" animation="{{animationData}}" bindtouchend="endEvent">
+    <image class="image-style" src="/pages/map/subway.jpg" style="left:{{ballleft}}px; top:{{balltop}}px; width:{{screenWidth}}px" bindtouchmove="ballMoveEvent">
     </image>
   </view>
 </view>
