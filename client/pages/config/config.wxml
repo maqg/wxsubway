@@ -20,7 +20,7 @@
 <view class="container">
   <view class="cnt">
     <image class="image-style" src="/pages/map/subway.jpg"
-      style="left:{{ballleft}}px; top:{{balltop}}px; width:{{screenWidth}}px"
+      style="left:{{ballleft}}px; top:{{balltop}}px; width:{{imageWidth}}px; height:{{imageHeight}}px;"
       bindtouchmove="ballMoveEvent"
       bindtouchend='ballMoveEndEvent'
       bindtouchstart='ballMoveStartEvent'>

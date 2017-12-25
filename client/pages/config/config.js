@@ -19,6 +19,9 @@ Page({
 
     startX: 0,
     startY: 0,
+
+    imageHeight: 0,
+    imageWidth: 0,
   },
 
   onLoad: function () {
@@ -28,6 +31,8 @@ Page({
         _this.setData({
           screenHeight: res.windowHeight,
           screenWidth: res.windowWidth,
+          imageHeight: parseInt(res.windowHeight / 2),
+          imageWidth: res.windowWidth,
         });
       }
     });
@@ -39,23 +44,20 @@ Page({
     console.log('屏幕宽度：' + this.data.screenWidth)
     console.log('启始pageX: ' + pageX);
 
-    var newLeft = this.data.oriLeft;
+    if (e.touches.length == 2) { // 二指缩放
+      this.setData({
+        imageWidth: 1500,
+        imageHeight: 900,
+      });
+      return;
+    }
 
+    var newLeft = this.data.oriLeft;
     if (this.data.startX > pageX) { // move to left
       newLeft -= (this.data.startX - pageX);
     } else {
       newLeft += (pageX - this.data.startX);
     }
-
-    /*这里用right和bottom.所以需要将pageX pageY转换  
-    var x = this.data.screenWidth / 2 - pageX - 20;
-    if (this.data.screenWidth > 385) {
-      if (x > 42) { x = 42; }
-    } else {
-      if (x > 32) { x = 32; }
-    }
-    if (x < 0) { x = 0; }
-    */
 
     console.log('NEW LEFT:' + newLeft)
     this.setData({
