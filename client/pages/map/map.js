@@ -11,6 +11,7 @@ Page({
     top: 50,
     baseScale: 1,
     width: "100%",
+    touches: [],
   },
 
   /**
@@ -26,7 +27,7 @@ Page({
   */
   bindTouchMove: function (e) {
 
-    if (e.touches.length == 1) { //一指移动当前图片
+    if (e.touches.length == 1 && this.data.move == 1) { //一指移动当前图片
       var left = e.touches[0].clientX - disPoint.x
       var top = e.touches[0].clientY - disPoint.y
       this.setData({
@@ -72,15 +73,23 @@ Page({
     }
   },
 
+  bindTouchEnd: function(e) {
+
+  },
+
   /**
   * bindtouchstart
   */
   bindTouchStart: function (e) {
     distanceList = [0, 0] //回复初始值
     disPoint = { x: 0, y: 0 }
+    this.data.touches = [];
     if (e.touches.length == 1) {
       disPoint.x = e.touches[0].clientX - this.data.left
       disPoint.y = e.touches[0].clientY - this.data.top
+      this.data.move = 1;
+    } else {
+      this.data.move = 0;
     }
   },
 
