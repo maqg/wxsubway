@@ -1,100 +1,108 @@
-//map.js
-var olddistance = 0;  //这个是上一次两个手指的距离
-var newdistance;      //本次两手指之间的距离，两个一减咱们就知道了滑动了多少，以及放大还是缩小（正负嘛）
-var oldscale = 1;     //这个是上一次动作留下的比例
-var diffdistance;     //这个是新的比例，新的比例一定是建立在旧的比例上面的，给人一种连续的假象
-var baseHeight;       //上一次触摸完之后的高
-var baseWidth;        //上一次触摸完之后的宽
-var windowWidth = 0;  //咱们屏幕的宽
-var windowHeight = 0; //咱们屏幕的高
+// map.js
+
+var app = getApp()
+var distanceList = [0, 0];//存储缩放时,双指距离.只有两个数据.第一项为old distance.最后一项为new distance
+var disPoint = { "x": 0, "y": 0 };//手指touch图片时,在图片上的位置
+var imgIdList = { };
 
 Page({
   data: {
-    title: "地铁运行图",
-    scaleWidth: "",
-    scaleHeight: "",
-    dataimg: "",
+    title: "运行图",
   },
+
+  /**
+  * 打开弹窗
+  */
+  showResizeModal: function (e) {
+    var src = e.currentTarget.dataset.src;
+    var x = 0
+    var y = 0
+    try {
+      var width = this.imgIdList[e.currentTarget.id].width; //图片原宽
+      var height = this.imgIdList[e.currentTarget.id].height; //图片原高
+      //小程序固定宽320px
+      height = height * (320 / width);
+      width = 320;
+      x = (app.windowWidth - width) / 2 //> 0 ? (app.windowWidth - width) / 2 : 0;
+      y = (app.windowHeight - height) / 2// > 0 ? (app.windowHeight - height) / 2 : 0;
+    } catch (e) { }
+    var img = {
+      top: y,
+      left: x,
+      x: x, y: y,
+      width: '100%',
+      baseScale: 1,
+      currentSrc: src,
+    };
+    this.setData({ img: img, isCheckDtl: true });
+  },
+  /**
+  * 关闭弹窗
+  */
+  closeResizeModal: function () {
+    this.setData({ isCheckDtl: false })
+  },
+  /**
+  * 加载图片
+  */
+  imageOnload: function (e) {
+    var id = e.currentTarget.id
+    this.imgIdList[id] = {
+      width: e.detail.width,
+      height: e.detail.height
+    }
+  },
+  /**
+  * bindtouchmove
+  */
+  bindTouchMove: function (e) {
+    if (e.touches.length == 1) {//一指移动当前图片
+      this.data.img.left = e.touches[0].clientX - this.disPoint.x
+      this.data.img.top = e.touches[0].clientY - this.disPoint.y
+      this.setData({ img: this.data.img })
+    }
+    if (e.touches.length == 2) {//二指缩放
+      var xMove = e.touches[1].clientX - e.touches[0].clientX
+      var yMove = e.touches[1].clientY - e.touches[0].clientY
+      var distance = Math.sqrt(xMove * xMove + yMove * yMove);//开根号
+      this.distanceList.shift()
+      this.distanceList.push(distance)
+      if (this.distanceList[0] == 0) { return }
+      var distanceDiff = this.distanceList[1] - this.distanceList[0]//两次touch之间, distance的变化. >0,放大图片.<0 缩小图片
+      // 假设缩放scale基数为1: newScale = oldScale + 0.005 * distanceDiff
+      var baseScale = this.data.img.baseScale + 0.005 * distanceDiff
+      if (baseScale > 0) {
+        this.data.img.baseScale = baseScale
+        var imgWidth = baseScale * parseInt(this.data.img.imgWidth)
+        var imgHeight = baseScale * parseInt(this.data.img.imgHeight)
+        this.setData({ img: this.data.img })
+      } else {
+        this.data.img.baseScale = 0
+        this.setData({ img: this.data.img })
+      }
+    }
+  },
+  /**
+  * bindtouchend
+  */
+  bindTouchEnd: function (e) {
+    if (e.touches.length == 2) {//二指缩放
+      this.setData({ isCheckDtl: true })
+    }
+  },
+  /**
+  * bindtouchstart
+  */
+  bindTouchStart: function (e) {
+    this.distanceList = [0, 0]//回复初始值
+    this.disPoint = { x: 0, y: 0 }
+    if (e.touches.length == 1) {
+      this.disPoint.x = e.touches[0].clientX - this.data.img.left
+      this.disPoint.y = e.touches[0].clientY - this.data.img.top
+    }
+  },
+
   onLoad: function (options) {
-    // 页面初始化 options为页面跳转所带来的参数
-    console.log(options.img)
-    var res = wx.getSystemInfoSync();  //获取系统信息的同步方法，我用了异步里面提示我this.setData错了
-    windowWidth = res.windowWidth;
-    windowHeight = res.windowHeight;
-    //那就给前面的图片进行赋值，高，宽以及路劲 
-    this.setData({
-      scaleHeight: windowHeight,
-      dataimg: options.img,
-      scaleWidth: windowWidth
-    })
+    this.setData({})
   },
-  //这里是图片加载完毕之后的信息，因为滑动手指距离会变，我们要跟着图片的长宽进行缩放，不能跟着屏幕的长宽进行缩放
-  imgload: function (e) {
-    var originalWidth = e.detail.width;//图片原始宽
-    var originalHeight = e.detail.height;//图片原始高
-    var originalScale = originalHeight / originalWidth;//图片高宽比
-    var windowscale = windowHeight / windowWidth;//屏幕高宽比
-    if (originalScale < windowscale) {//图片高宽比小于屏幕高宽比
-      //图片缩放后的宽为屏幕宽
-      baseWidth = windowWidth;
-
-      baseHeight = (windowWidth * originalHeight) / originalWidth;
-    } else {//图片高宽比大于屏幕高宽比
-      //图片缩放后的高为屏幕高
-      baseHeight = windowHeight;
-      baseWidth = (windowHeight * originalWidth) / originalHeight;
-    }
-  },
-  //两手指进行拖动了
-  movetap: function (event) {
-    var e = event;
-    if (e.touches.length == 2) {
-      var xMove = e.touches[1].clientX - e.touches[0].clientX;
-      var yMove = e.touches[1].clientY - e.touches[0].clientY;
-      var distance = Math.sqrt(xMove * xMove + yMove * yMove);//两手指之间的距离 
-      if (olddistance == 0) {
-        olddistance = distance; //要是第一次就给他弄上值，什么都不操作
-        console.log(olddistance);
-      }
-      else {
-        newdistance = distance; //第二次就可以计算它们的差值了
-        diffdistance = newdistance - olddistance;
-        olddistance = newdistance; //计算之后更新
-        console.log(diffdistance);
-        var newScale = oldscale + 0.005 * diffdistance;  //比例
-        console.log(newScale);
-        //刷新.wxml
-        this.setData({
-          scaleHeight: newScale * baseHeight,
-          scaleWidth: newScale * baseWidth
-
-        })
-        oldscale = newScale;
-        //更新比例
-
-      }
-    }
-  },
-  endtap: function (event) {
-    console.log(event);//抬起手指，保存下数据
-    if (event.touches.length == 2) {
-      olddistance = 0;
-    }
-
-  },
-  onReady: function () {
-    // 页面渲染完成
-
-  },
-  onShow: function () {
-    // 页面显示
-
-  },
-  onHide: function () {
-    // 页面隐藏
-
-  },
-  onUnload: function () {
-    // 页面关闭
-  }
 })

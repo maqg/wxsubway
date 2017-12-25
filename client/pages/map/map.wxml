@@ -1,10 +1,15 @@
 <!--index.wxml-->
-<view class="container">
+<view>
   <view class="title" style="text-align:center"> {{ title }} </view>
-  <view>
+  <!--view>
     <scroll-view scroll-y="true" scroll-x="true" style="height:100%; width:100%">
-      <!--image id="SFimg" catchtouchend="endtap" catchtouchmove="movetap" bindload="imgload" style="width:{{ scaleWidth }}px;height:{{ scaleHeight }}px" mode="aspectFit" src="/pages/map/subway.jpg"></image-->
       <image id="SFimg" catchtouchend="endtap" catchtouchmove="movetap" bindload="imgload" style="width:{{ scaleWidth }}px;height:{{ scaleHeight }}px" mode="scaleToFill" src="/pages/map/subway.jpg"></image>
     </scroll-view>
-  </view>
+  </view-->
+  <scroll-view class="backdrop" catchtouchmove="bindTouchMove" catchtouchend="bindTouchEnd" bindtouchstart="bindTouchStart">
+    <image catchtouchmove="bindTouchMove" bindtouchend="bindTouchEnd" bindtouchstart="bindTouchStart"
+    style=" transform: scale({{img.baseScale}}); position:absolute; top:{{img.top}}px; left:{{img.left}}px; "
+    mode="widthFix" class="dtl-img" src="/pages/map/subway.jpg">
+    </image>
+  </scroll-view>
 </view>
