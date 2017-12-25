@@ -19,7 +19,11 @@
 
 <view class="container">
   <view class="cnt">
-    <image class="image-style" src="/pages/map/subway.jpg" style="left:{{ballleft}}px; top:{{balltop}}px; width:{{screenWidth}}px" bindtouchmove="ballMoveEvent">
+    <image class="image-style" src="/pages/map/subway.jpg"
+      style="left:{{ballleft}}px; top:{{balltop}}px; width:{{screenWidth}}px"
+      bindtouchmove="ballMoveEvent"
+      bindtouchend='ballMoveEndEvent'
+      bindtouchstart='ballMoveStartEvent'>
     </image>
   </view>
 </view>
