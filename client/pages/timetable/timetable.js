@@ -6,13 +6,10 @@ const app = getApp()
 Page({
   data: {
     title: "首末车时间",
-    userInfo: {},
     lineId: 0,
     stationId: 0,
     subway: ['a', 'b', 'c'],
     timeInfo: '',
-    welcome: "欢迎使用北京地铁票价助手，by Henry.Ma",
-    stationListMap: {},
   },
 
   bindLineChange: function (e) {
@@ -46,27 +43,11 @@ Page({
     })
   },
 
-  initStationList: function () {
-    subway = this.data.subway;
-    for (var i = 0; i < subway.length; i++) {
-      for (var j = 0; j < subway[i].stations.length; j++) {
-        var s = subway[i].stations[j];
-        if (this.data.stationListMap.hasOwnProperty(s.name)) {
-          // station already in map
-        } else {
-          this.data.stationListMap[s.name] = s;
-        }
-      }
-    }
-  },
-
   onLoad: function () {
 
     this.setData({
       subway: subway,
     })
-
-    this.initStationList();
   },
 
 })

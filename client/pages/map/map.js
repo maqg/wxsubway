@@ -50,7 +50,7 @@ Page({
       var distanceDiff = distanceList[1] - distanceList[0] //两次touch之间, distance的变化. >0,放大图片.<0 缩小图片
 
       var baseScale = this.data.baseScale + 0.005 * distanceDiff
-      if (baseScale > 0) {
+      if (baseScale > 1) {
         this.data.baseScale = baseScale
         var imgWidth = baseScale * parseInt(this.data.imgWidth)
         var imgHeight = baseScale * parseInt(this.data.imgHeight)
@@ -61,11 +61,10 @@ Page({
         })
         console.log("left:" + this.data.left + "top: " + this.data.top + "dis:" + distanceDiff + "scale:" + this.data.baseScale)
       } else {
-        this.data.baseScale = 0
 
         this.setData({
-          left: this.data.left,
-          top: this.data.top,
+          left: this.data.left + parseInt(distanceDiff / 2),
+          top: this.data.top + parseInt(distanceDiff / 2),
           baseScale: this.data.baseScale,
         })
         console.log("left:" + this.data.left + "top: " + this.data.top + "disss:" + distanceDiff + "scale:" + this.data.baseScale)

@@ -1,5 +1,5 @@
 <!--index.wxml-->
-<!--view class="container">
+<view class="container">
 
   <view class="title" style="text-align:center"> {{ title }} </view>
 
@@ -15,15 +15,4 @@
     <text>{{welcome}}</text>
   </view>
 
-</view-->
-
-<view class="container">
-  <view class="cnt">
-    <image class="image-style" src="/pages/map/subway.jpg"
-      style="left:{{ballleft}}px; top:{{balltop}}px; width:{{imageWidth}}px; height:{{imageHeight}}px;"
-      bindtouchmove="ballMoveEvent"
-      bindtouchend='ballMoveEndEvent'
-      bindtouchstart='ballMoveStartEvent'>
-    </image>
-  </view>
 </view>
