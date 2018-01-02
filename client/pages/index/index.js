@@ -340,7 +340,7 @@ Page({
     return parseInt((seconds + 30 - 1) / 60) + this.data.exchangeStationList.length * 5;
   },
 
-   getExchangeLine: function(stationId) {
+  getExchangeLine: function (stationId) {
     var list1 = this.data.prevStationList[stationId - 1]["lineIds"];
     var list2 = this.data.prevStationList[stationId + 1]["lineIds"];
     var listBetween = this.data.prevStationList[stationId]["lineIds"];
@@ -437,11 +437,19 @@ Page({
     this.calculateFee(distance);
 
     var outText = "注意：以下结果给出的是最短距离的计价方案，并不一定是最优的换乘方案";
-    outText += "\n总距离：" + distance + " 米";
-    outText += "\n消耗时间：约 " + this.getMinutes(distance) + " 分钟";
-    outText += "\n单次费用：" + this.data.price + " 元";
-    outText += "\n每月花费：约 " + this.data.payMonth + " 元";
-    outText += "\n每年花费：约 " + this.data.payYear + " 元";
+    if (distance >= MAXINT) {
+      outText += "\n总距离：不可达";
+      outText += "\n消耗时间：不确定";
+      outText += "\n单次费用：不确定";
+      outText += "\n每月花费：不确定";
+      outText += "\n每年花费：不确定";
+    } else {
+      outText += "\n总距离：" + distance + " 米";
+      outText += "\n消耗时间：约 " + this.getMinutes(distance) + " 分钟";
+      outText += "\n单次费用：" + this.data.price + " 元";
+      outText += "\n每月花费：约 " + this.data.payMonth + " 元";
+      outText += "\n每年花费：约 " + this.data.payYear + " 元";
+    }
     outText += "\n经停站：（共计 " + (this.data.prevStationList.length - 1) + " 站）";
     outText += "\n";
 
