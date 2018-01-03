@@ -245,9 +245,8 @@ Page({
           this.data.stationListMap[station["name"]] = station
           this.data.stationList.push(station)
 
-          if (station.hasOwnProperty("endCircle")) {
+          if (station.hasOwnProperty("endCircle")) { // 处理环形路线
             var firstStation = line.stations[0];
-            console.log(firstStation);
             var tempStation = this.data.stationListMap[firstStation["name"]];
 
             station["subStations"].push({
