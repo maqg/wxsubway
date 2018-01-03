@@ -245,6 +245,22 @@ Page({
           this.data.stationListMap[station["name"]] = station
           this.data.stationList.push(station)
 
+          if (station.hasOwnProperty("endCircle")) {
+            var firstStation = line.stations[0];
+            console.log(firstStation);
+            var tempStation = this.data.stationListMap[firstStation["name"]];
+
+            station["subStations"].push({
+              "station": tempStation["position"],
+              "length": station["length"]
+            });
+
+            tempStation["subStations"].push({
+              "station": station["position"],
+              "length": station["length"]
+            });
+          }
+
           if (nextStation != null) { // having nextStation
             var oldNextStation = this.getOldStation(nextStation["name"]);
             if (oldNextStation != null) { // 该下一跳站点已通过其他线路，添加到队列中
