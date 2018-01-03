@@ -432,6 +432,24 @@ Page({
     return true;
   },
 
+  fillExchangeList: function () {
+    var nameList = "";
+    var passed = 0; // 经过的站点数
+
+    if (this.data.prevStationList.length == 1) {
+      return;
+    }
+
+    for (var i = 0; i < this.data.prevStationList.length; i++) {
+      if (i == 0 || i == this.data.prevStationList.length - 1) {
+        continue;
+      }
+      if (this.isExchangeStation(i)) {
+        this.data.exchangeStationList.push(this.data.prevStationList[i]);
+      }
+    }
+  },
+
   onQuery: function (e) {
 
     var startStationName = this.data.subway[this.data.startLineId].stations[this.data.startStationId].name;
@@ -450,6 +468,8 @@ Page({
     var distance = this.data.distances[endStation["position"]];
 
     this.calculateFee(distance);
+
+    this.fillExchangeList();
 
     var outText = "注意：以下结果给出的是最短距离的计价方案，并不一定是最优的换乘方案";
     if (distance >= MAXINT) {
