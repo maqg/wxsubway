@@ -436,6 +436,8 @@ Page({
     var nameList = "";
     var passed = 0; // 经过的站点数
 
+    this.data.exchangeStationList = [];
+
     if (this.data.prevStationList.length == 1) {
       return;
     }
